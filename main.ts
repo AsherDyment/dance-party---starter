@@ -24,19 +24,34 @@ function makeArrow () {
     arrow.vy = 50
     arrow.x = arrowXs[arrowNumber]
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function(sprite: Sprite, otherSprite: Sprite) {
+    info.changeScoreBy(1)
+    otherSprite.destroy(effects.smiles, 1)
+    sprite.setFlag(SpriteFlag.Ghost, true)
+})
 
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Food, function(sprite: Sprite, otherSprite: Sprite) {
+    info.changeLifeBy(-1)
+    otherSprite.destroy(effects.fire, 1)
+})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function() {
-  badDancer.x = arrowXs[0]  
+  badDancer.x = arrowXs[0]
+  badDancer.setFlag(SpriteFlag.Ghost, false)
 })
 controller.up.onEvent(ControllerButtonEvent.Pressed, function() {
-  badDancer.x = arrowXs[1]  
+  badDancer.x = arrowXs[1]
+  badDancer.setFlag(SpriteFlag.Ghost, false) 
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function() {
-  badDancer.x = arrowXs[2]  
+  badDancer.x = arrowXs[2]
+    badDancer.setFlag(SpriteFlag.Ghost, false)  
 })
+  
 controller.down.onEvent(ControllerButtonEvent.Pressed, function() {
   badDancer.x = arrowXs[3]  
+    badDancer.setFlag(SpriteFlag.Ghost, false)
 })
+
 let arrow: Sprite = null
 let arrowNumber = 0
 let stopper: Sprite = null
@@ -255,6 +270,7 @@ let badDancer = sprites.create(img`
     `, SpriteKind.Player)
 badDancer.y = 95
 badDancer.x = 35
+info.setLife(5)
 game.onUpdateInterval(500, function () {
     makeArrow()
 })
